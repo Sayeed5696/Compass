@@ -1,0 +1,218 @@
+@font-face{font-family:"Geist";font-style:normal;font-weight:100 900;font-display:swap;src:url("/fonts/Geist-Variable.woff2") format("woff2")}
+@font-face{font-family:"Barlow";src:url("/fonts/barlow-latin-400-normal.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Barlow";src:url("/fonts/barlow-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Barlow";src:url("/fonts/barlow-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Barlow Semi Condensed";src:url("/fonts/barlow-semi-condensed-latin-500-normal.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Barlow Semi Condensed";src:url("/fonts/barlow-semi-condensed-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
+
+:root{
+  --chart:#132f4a;          /* night chart navy: page */
+  --chart-deep:#0d243a;
+  --chart-line:rgba(206,224,240,.30);
+  --chart-line-strong:rgba(226,238,248,.72);
+  --paper:#fbfcfd;          /* card */
+  --ink:#14283b;
+  --ink-soft:#4d6275;
+  --rule:#d3dde6;
+  --signal:#2f6fed;         /* primary action, shared with the app */
+  --signal-dark:#2259c9;
+  --needle:#e0483e;         /* north + errors only */
+  --display:"Barlow Semi Condensed","Bahnschrift","DIN Alternate","Segoe UI",sans-serif;
+  --text:"Barlow","Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;min-height:100vh;overflow-x:hidden;
+  font-family:var(--text);font-size:16px;line-height:1.5;color:var(--ink);
+  background:radial-gradient(circle at 50% 50%,#1b4166 0,var(--chart) 46%,var(--chart-deep) 100%);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------------------------------------------------------- bearing dial */
+.dial{
+  position:fixed;left:50%;top:50%;
+  width:max(min(94vh,94vw),660px);height:auto;aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  pointer-events:none;z-index:0;overflow:visible;
+}
+.dial-card{transform-origin:0 0;transform:rotate(0deg)}
+.is-loading .dial-card{transform:rotate(118deg)}
+.is-ready .dial-card{animation:settle 2.4s cubic-bezier(.22,.9,.28,1) both}
+@keyframes settle{
+  0%{transform:rotate(118deg)}
+  48%{transform:rotate(-11deg)}
+  66%{transform:rotate(5deg)}
+  80%{transform:rotate(-2deg)}
+  91%{transform:rotate(.8deg)}
+  100%{transform:rotate(0deg)}
+}
+.dial .ring{fill:none;stroke:var(--chart-line);stroke-width:1.2}
+.dial .tick{stroke:var(--chart-line);stroke-width:1.4}
+.dial .tick.major{stroke:var(--chart-line-strong);stroke-width:2}
+.dial .num{fill:rgba(226,238,248,.62);font:500 19px var(--display);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.dial .cardinal{fill:#f2f7fb;font:600 40px var(--display)}
+.dial .cardinal.north{fill:var(--needle)}
+.dial .lubber{fill:var(--needle)}
+.is-leaving .dial-card{animation:depart .55s cubic-bezier(.5,0,.75,0) both}
+@keyframes depart{to{transform:rotate(-45deg);opacity:.15}}
+
+/* ---------------------------------------------------------------- frame */
+.corner{position:fixed;left:0;right:0;z-index:2;display:flex;align-items:center;padding:22px 28px;color:#e8f0f7}
+.corner-top{top:0;gap:10px}
+.corner-bottom{bottom:0;justify-content:space-between;font-size:14px;color:rgba(232,240,247,.62)}
+.mark{width:30px;height:30px;color:#f2f7fb;display:inline-flex}
+.mark svg{width:100%;height:100%}
+.wordmark{font:600 25px/1 var(--display);letter-spacing:.01em}
+
+.stage{position:relative;z-index:1;min-height:100vh;display:grid;place-items:center;padding:88px 16px}
+
+/* ----------------------------------------------------------------- card */
+.card{
+  width:min(404px,100%);
+  background:var(--paper);
+  border-radius:16px;
+  padding:34px 34px 26px;
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 28px 70px rgba(3,14,27,.48),0 6px 18px rgba(3,14,27,.25);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.is-loading .card{opacity:0;transform:translateY(6px)}
+.is-ready .card{opacity:1;transform:none;transition-delay:.25s}
+.is-leaving .card{opacity:0;transform:scale(.985)}
+.card.shake{animation:shake .32s ease}
+@keyframes shake{20%{transform:translateX(-7px)}45%{transform:translateX(6px)}70%{transform:translateX(-3px)}100%{transform:none}}
+
+.card-logos{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-bottom:20px;margin-bottom:22px;border-bottom:1px solid #e4eaf0}
+.logo-emblem{height:72px;width:auto;display:block}
+.logo-cyberx{width:124px;height:auto;display:block}
+.logo-divider{display:none}
+.view[hidden]{display:none}
+h1{font:600 33px/1.1 var(--display);margin:0 0 8px;letter-spacing:-.005em;color:var(--ink)}
+.lede{margin:0 0 22px;color:var(--ink-soft);font-size:15.5px;max-width:34ch}
+.loading-view .lede{margin:6px 0}
+
+label{display:block;font-weight:500;font-size:14.5px;margin:14px 0 6px;color:#26405a}
+label .opt{font-weight:400;color:#7a8b9b;margin-left:4px}
+input{
+  width:100%;height:48px;padding:0 14px;
+  font:400 16px var(--text);color:var(--ink);
+  background:#fff;border:1px solid #c6d2dc;border-radius:10px;outline:none;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+input:hover{border-color:#a9bac8}
+input:focus{border-color:var(--signal);box-shadow:0 0 0 3px rgba(47,111,237,.18)}
+input[aria-invalid="true"]{border-color:var(--needle)}
+.pw{position:relative}
+.pw input{padding-right:72px}
+.reveal{
+  position:absolute;right:6px;top:6px;height:36px;padding:0 12px;
+  border:0;border-radius:7px;background:transparent;color:var(--signal);
+  font:500 14px var(--text);cursor:pointer;
+}
+.reveal:hover{background:#eef3fe}
+.reveal:focus-visible{outline:2px solid var(--signal);outline-offset:1px}
+
+.meter{height:4px;border-radius:2px;background:#e3e9ef;margin-top:8px;overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:#c9a227;transition:width .25s ease,background-color .25s ease}
+.meter[data-score="1"] span{width:25%;background:var(--needle)}
+.meter[data-score="2"] span{width:50%;background:#d98f1e}
+.meter[data-score="3"] span{width:75%;background:#2b8a6e}
+.meter[data-score="4"] span{width:100%;background:#1f7a5c}
+.hint{margin:6px 0 0;font-size:13.5px;color:#6b7d8e}
+.caps{margin:8px 0 0;font-size:13.5px;color:#9a5b00}
+.error{
+  margin:16px 0 0;padding:10px 12px;border-radius:9px;
+  background:#fdf0ef;color:#a3271e;font-size:14.5px;border-left:3px solid var(--needle);
+}
+.submit{
+  width:100%;height:50px;margin-top:22px;border:0;border-radius:10px;
+  background:var(--signal);color:#fff;font:600 16.5px var(--text);letter-spacing:.01em;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 16px rgba(47,111,237,.28);
+  transition:background-color .15s ease,transform .12s ease,box-shadow .15s ease;
+}
+.submit:hover{background:var(--signal-dark)}
+.submit:active{transform:translateY(1px);box-shadow:0 2px 8px rgba(47,111,237,.25)}
+.submit:focus-visible{outline:3px solid rgba(47,111,237,.35);outline-offset:2px}
+.submit[disabled]{opacity:.7;cursor:progress}
+.link{display:block;margin:14px auto 0;border:0;background:none;color:var(--ink-soft);font:500 14.5px var(--text);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.link:hover{color:var(--ink)}
+.fine{margin:18px 0 0;padding-top:16px;border-top:1px solid #e4eaf0;font-size:13.5px;color:#6b7d8e;text-align:center}
+
+@media (max-width:560px){
+  .corner{padding:16px 18px}
+  .corner-bottom{display:none}
+  .card{padding:28px 22px 22px;border-radius:14px}
+  h1{font-size:29px}
+  .stage{padding:76px 16px 28px}
+  .logo-emblem{height:60px}
+  .logo-cyberx{width:104px}
+}
+@media (max-height:700px){.stage{align-items:start}}
+@media (prefers-reduced-motion:reduce){
+  .is-loading .dial-card,.is-ready .dial-card,.is-leaving .dial-card{animation:none;transform:none}
+  .card,.card.shake{transition:none;animation:none}
+}
+
+/* =====================================================================
+   HeroUI look for the sign-in page, with light and dark themes.
+   Follows the computer's setting until a person picks one (theme.js).
+   ===================================================================== */
+:root{
+  color-scheme:light;
+  --font-ui:"Geist","Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+  --page:#f4f4f5;--card:#fff;--ink:#11181c;--ink-soft:#52525b;--rule:#e4e4e7;--field:#fff;--field-line:#d4d4d8;--field-hover:#71717a;
+  --signal:#006fee;--signal-dark:#005bc4;--link:#0061d1;--soft:#f4f4f5;--soft-hover:#e4e4e7;
+  --chart-line:rgba(17,24,28,.10);--chart-line-strong:rgba(17,24,28,.30);--dial-num:rgba(17,24,28,.42);--dial-card:#11181c;
+  --corner:#11181c;--corner-dim:#71717a;--glow:radial-gradient(900px 480px at 50% 0%,rgba(0,111,238,.10),transparent 70%);
+  --shadow:0 0 15px rgba(0,0,0,.03),0 2px 30px rgba(0,0,0,.08),0 0 1px rgba(0,0,0,.3);
+  --err-bg:#fff5f8;--err:#a10e43;--err-line:#f31260;--caps:#7a5212;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#09090b;--card:#18181b;--ink:#ecedee;--ink-soft:#a1a1aa;--rule:#2e2e33;--field:#18181b;--field-line:#3f3f46;--field-hover:#8b8b94;
+  --signal:#006fee;--signal-dark:#338ef7;--link:#66aaf9;--soft:#27272a;--soft-hover:#3a3a40;
+  --chart-line:rgba(255,255,255,.10);--chart-line-strong:rgba(255,255,255,.32);--dial-num:rgba(255,255,255,.40);--dial-card:#ecedee;
+  --corner:#ecedee;--corner-dim:#8b8b94;--glow:radial-gradient(900px 480px at 50% -40px,rgba(0,111,238,.24),transparent 70%);
+  --shadow:0 0 0 1px rgba(255,255,255,.08),0 24px 60px rgba(0,0,0,.55);
+  --err-bg:rgba(243,18,96,.12);--err:#ff8fb3;--err-line:#f31260;--caps:#f9c872;
+}
+body{background:var(--glow) no-repeat,var(--page);color:var(--ink);font-family:var(--font-ui)}
+.dial .num{fill:var(--dial-num)}
+.dial .cardinal{fill:var(--dial-card)}
+.dial .cardinal.north{fill:var(--needle)}
+.corner{color:var(--corner)}
+.corner-bottom{color:var(--corner-dim)}
+.mark{color:var(--corner)}
+.wordmark,h1{font-family:var(--font-ui)}
+h1{font-weight:700;letter-spacing:-.02em}
+.card{background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
+.card-logos{border-bottom-color:var(--rule)}
+:root[data-theme="dark"] .logo-emblem,:root[data-theme="dark"] .logo-cyberx{background:#fff;border-radius:14px;padding:5px 8px}
+.lede{color:var(--ink-soft)}
+label{color:var(--ink);font-weight:500}
+label .opt{color:var(--ink-soft)}
+input{background:var(--field);color:var(--ink);border:2px solid var(--field-line);border-radius:12px;font-family:var(--font-ui)}
+input:hover{border-color:var(--field-hover)}
+input:focus{border-color:var(--signal-dark);box-shadow:0 0 0 3px rgba(0,111,238,.28)}
+input[aria-invalid="true"]{border-color:var(--err-line)}
+.reveal{color:var(--link);border-radius:999px;font-family:var(--font-ui)}
+.reveal:hover{background:var(--soft)}
+.meter{background:var(--soft)}
+.hint,.fine{color:var(--ink-soft)}
+.fine{border-top-color:var(--rule)}
+.caps{color:var(--caps)}
+.error{background:var(--err-bg);color:var(--err);border-left-color:var(--err-line);border-radius:12px}
+.submit{background:var(--signal);color:#fff;border-radius:999px;height:50px;font-family:var(--font-ui);box-shadow:none}
+.submit:hover{background:var(--signal-dark);color:#fff}
+.submit:active{transform:scale(.98);box-shadow:none}
+.link{color:var(--ink-soft);font-family:var(--font-ui)}
+.link:hover{color:var(--ink)}
+
+/* theme switch (top right) */
+.theme-switch{margin-left:auto;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--soft)}
+.theme-switch button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:34px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:var(--ink-soft);font:500 13px var(--font-ui);cursor:pointer}
+.theme-switch button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-switch button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.theme-switch button:hover{color:var(--ink)}
+.theme-switch button:focus-visible{outline:2px solid var(--signal-dark);outline-offset:1px}
+@media (max-width:560px){.theme-switch button span{display:none}.theme-switch button{padding:0 11px}}
