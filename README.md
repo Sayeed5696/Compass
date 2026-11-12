@@ -54,12 +54,6 @@ How Compass decides:
 
 Every analysis is saved to My history and can be downloaded as a report.
 
-## Website history
-
-The **Website history** tab on a domain or URL investigation lists dated Wayback Machine versions of the site: first and latest capture, days captured per year (click a year to filter), every capture where the content changed, page errors, and archived redirects with where they pointed (redirects to other sites are flagged). Snapshots open on web.archive.org, so the site itself is never contacted.
-
-Compass was previously called Veyron (versions 4.x).
-
 ## Network use
 
 - **First run:** the sign-in page asks you to create the administrator account.
@@ -74,8 +68,6 @@ Environment variables (optional): `COMPASS_PORT` (default 8765), `COMPASS_HOST` 
 - Administrators add users one at a time or in bulk (paste a list of usernames, e.g. for a class of trainees). Compass generates a temporary password for each, shown once, with a CSV download. New users must choose their own password at first sign-in.
 - Passwords are stored as salted PBKDF2-SHA256 hashes. Sessions last 12 hours and use HttpOnly, SameSite=Strict cookies plus a CSRF token. Five failed sign-ins lock that username for five minutes.
 - Deleting a user also deletes their history. Disabling a user signs them out immediately.
-
-## Discovery (new in 5.0)
 
 **Domain or URL.** Compass works out the registered domain using the bundled Public Suffix List, so `www.portal.example.co.in` is searched as `example.co.in`. It then queries these sources in parallel:
 
