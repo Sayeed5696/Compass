@@ -24,14 +24,6 @@ signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /a Compass
 
 The launcher's source and build command are in the `launcher` folder.
 
-## Look and theme
-
-The interface now follows the HeroUI design (heroui.com): soft layered cards, fully rounded buttons and chips, segmented pill tabs, bordered fields with a blue focus ring, and a blue accent. There is a **Light / Dark** switch in the sidebar. Until someone chooses, Compass follows the computer's own light or dark setting; the choice is remembered per browser. Status colours keep the same meaning in both themes (red failed or malicious, amber partial, blue checked and nothing found, green live or done, grey not checked). The sign-in page follows the same theme and has its own Light / Dark switch. Downloaded reports keep their light styling so they print cleanly.
-
-## Upgrading from an earlier version
-
-Stop Compass, replace the program files with this version, and keep your existing `data` folder (users, history and API keys carry over). Start it with **Compass.exe** (unblock the zip first), or **Install Compass.bat** if Smart App Control blocks the exe. No new Python packages are needed.
-
 ## Status colours
 
 The same scheme is used on every page, and every colour comes with a word so it still reads on a projector, in print and in CSV exports:
