@@ -4,7 +4,7 @@ Threat intelligence for investigators. Enter an IP, domain, URL or hash. Compass
 
 ## Starting Compass
 
-**Unblock the zip before extracting.** Right-click the downloaded zip → **Properties** → tick **Unblock** → **OK**, then extract. This removes the "downloaded from the internet" mark that makes Smart App Control and SmartScreen treat files as untrusted, and it is the main reason one build runs while another is blocked. Do this first.
+**Unblock the zip before extracting.** Right-click the downloaded zip → **Properties** → tick **Unblock** → **OK**, then extract. This removes the "downloaded from the internet" mark that makes Smart App Control and SmartScreen treat files as untrusted. Do this first.
 
 Then double-click **Compass.exe**. It starts in the background (no console window), opens in your browser, and puts a compass icon in the notification area (tray) with **Open Compass**, **Open log folder** and **Stop Compass**. Opening it again while it is already running just reopens the browser.
 
